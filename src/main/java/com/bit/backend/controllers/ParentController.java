@@ -7,9 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -48,11 +45,5 @@ public class ParentController {
     @DeleteMapping("/parent/{id}")
     public ResponseEntity<ApiListResponse<ParentDto>> deleteParent(@PathVariable long id) {
         return ResponseEntity.ok(ApiListResponse.ofOne(parentServiceI.deleteParent(id)));
-    }
-
-    @GetMapping("/parent/getClass/{courseId}")
-    public ResponseEntity<ApiListResponse<Map<String, Object>>> getParentsForClass(@PathVariable long courseId) {
-        List<Map<String, Object>> empty = Collections.emptyList();
-        return ResponseEntity.ok(ApiListResponse.of(empty));
     }
 }
