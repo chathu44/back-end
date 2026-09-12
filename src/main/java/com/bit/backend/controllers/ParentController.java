@@ -1,9 +1,7 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.ApiListResponse;
-import com.bit.backend.dtos.StatusDto;
 import com.bit.backend.dtos.ParentDto;
-import com.bit.backend.services.StatusServiceI;
 import com.bit.backend.services.ParentServiceI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +16,9 @@ import java.util.Map;
 public class ParentController {
 
     private final ParentServiceI parentServiceI;
-    private final StatusServiceI statusServiceI;
 
-    public ParentController(ParentServiceI parentServiceI, StatusServiceI statusServiceI) {
+    public ParentController(ParentServiceI parentServiceI) {
         this.parentServiceI = parentServiceI;
-        this.statusServiceI = statusServiceI;
-    }
-
-    @GetMapping("/status")
-    public ResponseEntity<ApiListResponse<StatusDto>> getAllStatus() {
-        return ResponseEntity.ok(ApiListResponse.of(statusServiceI.getAllStatus()));
     }
 
     @GetMapping("/parent")

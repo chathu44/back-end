@@ -2,7 +2,7 @@ package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.ParentDto;
 import com.bit.backend.entities.StatusEntity;
-import com.bit.backend.entities.Parent;
+import com.bit.backend.entities.ParentEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.ParentMapper;
 import com.bit.backend.repositories.StatusRepository;
@@ -33,11 +33,11 @@ public class ParentServiceImpl implements ParentServiceI {
     @Transactional
     public ParentDto addParent(ParentDto parentDto) {
         StatusEntity status = resolveStatus(parentDto);
-        Parent entity = parentMapper.toParent(parentDto);
+        ParentEntity entity = parentMapper.toParent(parentDto);
         entity.setId(null);
         entity.setStatus(status);
 
-        Parent saved = parentRepository.save(entity);
+        ParentEntity saved = parentRepository.save(entity);
         if (saved.getParentCode() == null || saved.getParentCode().isBlank()) {
             saved.setParentCode("PAR-" + saved.getId());
             saved = parentRepository.save(saved);
@@ -52,7 +52,7 @@ public class ParentServiceImpl implements ParentServiceI {
 
     @Override
     public ParentDto getParentById(long id) {
-        Parent entity = parentRepository.findById(id)
+        ParentEntity entity = parentRepository.findById(id)
                 .orElseThrow(() -> new AppException("Parent not found", HttpStatus.NOT_FOUND));
         return parentMapper.toParentDto(entity);
     }
@@ -60,7 +60,7 @@ public class ParentServiceImpl implements ParentServiceI {
     @Override
     @Transactional
     public ParentDto updateParent(long id, ParentDto parentDto) {
-        Parent existing = parentRepository.findById(id)
+        ParentEntity existing = parentRepository.findById(id)
                 .orElseThrow(() -> new AppException("Parent not found", HttpStatus.NOT_FOUND));
 
         StatusEntity status = resolveStatus(parentDto);
@@ -83,7 +83,7 @@ public class ParentServiceImpl implements ParentServiceI {
     @Override
     @Transactional
     public ParentDto deleteParent(long id) {
-        Parent existing = parentRepository.findById(id)
+        ParentEntity existing = parentRepository.findById(id)
                 .orElseThrow(() -> new AppException("Parent not found", HttpStatus.NOT_FOUND));
         ParentDto dto = parentMapper.toParentDto(existing);
         parentRepository.delete(existing);

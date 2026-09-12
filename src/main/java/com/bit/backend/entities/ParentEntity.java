@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "parent")
-public class Parent extends AuditableEntity {
+public class ParentEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +41,7 @@ public class Parent extends AuditableEntity {
     @JoinColumn(name = "status_id", nullable = false)
     private StatusEntity status;
 
-    public Parent() {
+    public ParentEntity() {
     }
 
     public Long getId() {
