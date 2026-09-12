@@ -3,6 +3,7 @@ package com.bit.backend.services.impl;
 import com.bit.backend.dtos.ParentDto;
 import com.bit.backend.entities.ParentEntity;
 import com.bit.backend.entities.StatusEntity;
+import com.bit.backend.entities.ParentEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.ParentMapper;
 import com.bit.backend.repositories.StatusRepository;
@@ -33,7 +34,7 @@ public class ParentServiceImpl implements ParentServiceI {
     @Transactional
     public ParentDto addParent(ParentDto parentDto) {
         StatusEntity status = resolveStatus(parentDto);
-        ParentEntity entity = parentMapper.toParentEntity(parentDto);
+        ParentEntity entity = parentMapper.toParent(parentDto);
         entity.setId(null);
         entity.setStatus(status);
 
