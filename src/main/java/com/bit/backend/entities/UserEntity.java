@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "app_user")
-public class User extends AuditableEntity {
+public class UserEntity extends AuditableEntity {
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(Long id, String firstName, String lastName, String login, String password) {
+    public UserEntity(Long id, String firstName, String lastName, String login, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

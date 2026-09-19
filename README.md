@@ -54,10 +54,10 @@ Keep **auth**, **privilege**, **login log**, and **audit** patterns as-is unless
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| POST | `/login` | No | Login → user + JWT |
+| POST | `/login` | No | Login → userEntity + JWT |
 | POST | `/logout` | Yes | Records logout time |
-| POST | `/register` | No | Register → user + JWT |
-| GET | `/get-auth-ids/{id}` | Yes | Privilege IDs for your own user |
+| POST | `/register` | No | Register → userEntity + JWT |
+| GET | `/get-auth-ids/{id}` | Yes | Privilege IDs for your own userEntity |
 | GET | `/login-logs` | Yes | Login history |
 | GET/POST/PUT/DELETE | `/students`, `/courses`, `/teachers`, … | Yes | Sample CRUD |
 | GET/PUT | `/system-privileges` | Yes | Privilege dual-list |
@@ -69,7 +69,7 @@ Keep **auth**, **privilege**, **login log**, and **audit** patterns as-is unless
 Authorization: Bearer <token>
 ```
 
-JWT includes claim `id` (user primary key).
+JWT includes claim `id` (userEntity primary key).
 
 ## Project structure
 
@@ -83,4 +83,4 @@ CORS allows `http://localhost:4200`.
 
 ## Database files
 
-Only **`schema.sql`** is needed. Hibernate `ddl-auto=update` can add missing columns on startup, but run `schema.sql` once for seed data (admin user, privileges, sample statuses).
+Only **`schema.sql`** is needed. Hibernate `ddl-auto=update` can add missing columns on startup, but run `schema.sql` once for seed data (admin userEntity, privileges, sample statuses).

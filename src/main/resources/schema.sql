@@ -166,7 +166,7 @@ SELECT * FROM (
 ) AS qualification_seed
 WHERE NOT EXISTS (SELECT 1 FROM qualification LIMIT 1);
 
--- Default admin user password is: password
+-- Default admin userEntity password is: password
 -- BCrypt hash for "password"
 INSERT INTO app_user (first_name, last_name, login, password)
 SELECT 'System', 'Admin', 'admin', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG'
