@@ -2,7 +2,6 @@ package com.bit.backend.mappers;
 
 import com.bit.backend.dtos.*;
 import com.bit.backend.entities.*;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,8 +19,6 @@ public interface AttendanceMapper {
 
     StatusDto toStatusDto(StatusEntity entity);
 
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
     StaffDto toStaffDto(StaffEntity entity);
 
     @Mapping(target = "child", source = "child")

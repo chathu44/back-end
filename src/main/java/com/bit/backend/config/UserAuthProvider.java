@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bit.backend.dtos.UserDto;
-import com.bit.backend.entities.User;
+import com.bit.backend.entities.UserEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.UserMapper;
 import com.bit.backend.repositories.UserRepository;
@@ -69,9 +69,9 @@ public class UserAuthProvider {
     public Authentication validateTokenStrongly(String token) {
         DecodedJWT decodedJWT = verify(token);
 
-        User user = userRepository.findByLogin(decodedJWT.getIssuer())
-                .orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
-        return new UsernamePasswordAuthenticationToken(userMapper.toUserDto(user), null, Collections.emptyList());
+        UserEntity userEntity = userRepository.findByLogin(decodedJWT.getIssuer())
+                .orElseThrow(() -> new AppException("Unknown UserEntity", HttpStatus.NOT_FOUND));
+        return new UsernamePasswordAuthenticationToken(userMapper.toUserDto(userEntity), null, Collections.emptyList());
     }
 
     private DecodedJWT verify(String token) {

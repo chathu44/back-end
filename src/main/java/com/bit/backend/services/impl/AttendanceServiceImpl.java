@@ -1,7 +1,6 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.AttendanceDto;
-import com.bit.backend.dtos.StaffDto;
 import com.bit.backend.entities.*;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AttendanceMapper;
@@ -93,8 +92,8 @@ public class AttendanceServiceImpl implements AttendanceServiceI {
         ChildEntity child = resolveChild(attendanceDto);
         ClassroomEntity classroom = resolveClassroom(attendanceDto);
         StatusEntity status = resolveStatus(attendanceDto);
-        StaffEntity checkedInBy = resolveStaff(attendanceDto);
-        StaffEntity checkedOutBy = resolveStaff(attendanceDto);
+        StaffEntity checkedInBy = resolveCheckedInBy(attendanceDto);
+        StaffEntity checkedOutBy = resolveCheckedOutBy(attendanceDto);
 
         existing.setAttendanceDate(attendanceDto.getAttendanceDate());
         existing.setCheckInTime(attendanceDto.getCheckInTime());
@@ -176,7 +175,7 @@ public class AttendanceServiceImpl implements AttendanceServiceI {
     }
 
     private StaffEntity resolveCheckedOutBy(AttendanceDto dto) {
-        if (dto.getCheckedIOutBy() == null || dto.getCheckedOutBy().getId() == null) {
+        if (dto.getCheckedOutBy() == null || dto.getCheckedOutBy().getId() == null) {
             throw new AppException("Check-out staff ID is required", HttpStatus.BAD_REQUEST);
         }
         return staffRepository.findById(dto.getCheckedOutBy().getId())

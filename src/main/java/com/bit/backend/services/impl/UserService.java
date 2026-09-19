@@ -3,7 +3,7 @@ package com.bit.backend.services.impl;
 import com.bit.backend.dtos.CredentialsDto;
 import com.bit.backend.dtos.SignUpDto;
 import com.bit.backend.dtos.UserDto;
-import com.bit.backend.entities.User;
+import com.bit.backend.entities.UserEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.UserMapper;
 import com.bit.backend.repositories.UserRepository;
@@ -37,30 +37,30 @@ public class UserService implements UserServiceI {
     @Override
     public UserDto login(CredentialsDto credentialsDto) {
         logger.debug("Entering login...");
-        User user = userRepository.findByLogin(credentialsDto.login())
-                .orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
+        UserEntity userEntity = userRepository.findByLogin(credentialsDto.login())
+                .orElseThrow(() -> new AppException("Unknown UserEntity", HttpStatus.NOT_FOUND));
 
-        if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), user.getPassword())) {
-            return userMapper.toUserDto(user);
+        if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), userEntity.getPassword())) {
+            return userMapper.toUserDto(userEntity);
         }
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
     @Override
     public UserDto register(SignUpDto signUpDto) {
-        Optional<User> existing = userRepository.findByLogin(signUpDto.login());
+        Optional<UserEntity> existing = userRepository.findByLogin(signUpDto.login());
         if (existing.isPresent()) {
-            throw new AppException("User Already Exists", HttpStatus.BAD_REQUEST);
+            throw new AppException("UserEntity Already Exists", HttpStatus.BAD_REQUEST);
         }
 
-        User user = userMapper.signUpToUser(signUpDto);
-        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
-        User savedUser = userRepository.save(user);
-        if (savedUser.getCreatedBy() == null) {
-            savedUser.setCreatedBy(savedUser.getId());
-            savedUser = userRepository.save(savedUser);
+        UserEntity userEntity = userMapper.signUpToUser(signUpDto);
+        userEntity.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
+        UserEntity savedUserEntity = userRepository.save(userEntity);
+        if (savedUserEntity.getCreatedBy() == null) {
+            savedUserEntity.setCreatedBy(savedUserEntity.getId());
+            savedUserEntity = userRepository.save(savedUserEntity);
         }
-        return userMapper.toUserDto(savedUser);
+        return userMapper.toUserDto(savedUserEntity);
     }
 
     @Override
