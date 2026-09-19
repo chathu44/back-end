@@ -39,6 +39,8 @@ public class ClassroomServiceImpl implements ClassroomServiceI {
                 classroomMapper.toClassroomEntity(classroomDto);
 
         entity.setId(null);
+        entity.setUpdatedBy(null);
+        entity.setUpdatedDate(null);
         entity.setStatus(status);
 
         ClassroomEntity saved = classroomRepository.save(entity);
