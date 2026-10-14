@@ -166,20 +166,54 @@ public class AttendanceServiceImpl implements AttendanceServiceI {
                 ));
     }
 
+
     private StaffEntity resolveCheckedInBy(AttendanceDto dto) {
-        if (dto.getCheckedInBy() == null || dto.getCheckedInBy().getId() == null) {
-            throw new AppException("Check-in staff ID is required", HttpStatus.BAD_REQUEST);
+        Long staffId = dto.getCheckedInBy() != null
+                ? dto.getCheckedInBy().getId()
+                : null;
+
+        // Check-in staff is required only when a check-in time exists.
+        if (staffId == null) {
+            if (dto.getCheckInTime() != null) {
+                throw new AppException(
+                        "Check-in staff ID is required when check-in time is recorded",
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+            return null;
         }
-        return staffRepository.findById(dto.getCheckedInBy().getId())
-                .orElseThrow(() -> new AppException("Check-in staff not found", HttpStatus.BAD_REQUEST));
+
+        return staffRepository.findById(staffId)
+                .orElseThrow(() -> new AppException(
+                        "Check-in staff not found",
+                        HttpStatus.BAD_REQUEST
+                ));
     }
 
     private StaffEntity resolveCheckedOutBy(AttendanceDto dto) {
-        if (dto.getCheckedOutBy() == null || dto.getCheckedOutBy().getId() == null) {
-            throw new AppException("Check-out staff ID is required", HttpStatus.BAD_REQUEST);
+        Long staffId = dto.getCheckedOutBy() != null
+                ? dto.getCheckedOutBy().getId()
+                : null;
+
+        // Check-out staff is required only when a check-out time exists.
+        if (staffId == null) {
+            if (dto.getCheckOutTime() != null) {
+                throw new AppException(
+                        "Check-out staff ID is required when check-out time is recorded",
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+            return null;
         }
-        return staffRepository.findById(dto.getCheckedOutBy().getId())
-                .orElseThrow(() -> new AppException("Check-out staff not found", HttpStatus.BAD_REQUEST));
+
+        return staffRepository.findById(staffId)
+                .orElseThrow(() -> new AppException(
+                        "Check-out staff not found",
+                        HttpStatus.BAD_REQUEST
+                ));
     }
+
 
 }
