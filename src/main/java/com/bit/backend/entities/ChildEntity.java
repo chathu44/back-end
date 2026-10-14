@@ -36,7 +36,7 @@ public class ChildEntity extends AuditableEntity {
     @Column(name = "medical_notes", columnDefinition = "TEXT")
     private String medicalNotes;
 
-    @Column(name = "photo_url", length = 255)
+    @Column(name = "photo_url", columnDefinition = "MEDIUMTEXT")
     private String photoUrl;
 
     @ManyToOne(fetch = FetchType.EAGER)
