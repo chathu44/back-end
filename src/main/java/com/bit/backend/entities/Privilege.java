@@ -12,13 +12,13 @@ public class Privilege extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "auth_description")
+    @Column(name = "auth_description", nullable = false, length = 255)
     private String authDescription;
 
-    @Column(name = "assigned")
+    @Column(name = "assigned", columnDefinition = "INT DEFAULT 0")
     private int assigned;
 
-    @Column(name = "auth_id")
+    @Column(name = "auth_id", unique = true)
     private int authId;
 
     public Long getId() {

@@ -19,13 +19,13 @@ public class PrivilegeGroup extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "group_name")
+    @Column(name = "group_name", nullable = false, length = 100)
     private String groupName;
 
-    @Column(name = "group_description")
+    @Column(name = "group_description", length = 255)
     private String groupDescription;
 
-    @Column(name = "status")
+    @Column(name = "status", columnDefinition = "INT DEFAULT 1")
     private int status;
 
     public Long getId() {

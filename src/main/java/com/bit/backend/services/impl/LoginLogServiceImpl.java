@@ -2,9 +2,12 @@ package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.LoginLogDto;
 import com.bit.backend.entities.LoginLogEntity;
+import com.bit.backend.entities.UserEntity;
 import com.bit.backend.entities.UserType;
 import com.bit.backend.repositories.LoginLogRepository;
 import com.bit.backend.services.LoginLogServiceI;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,18 +19,34 @@ public class LoginLogServiceImpl implements LoginLogServiceI {
 
     private final LoginLogRepository loginLogRepository;
 
-    public LoginLogServiceImpl(LoginLogRepository loginLogRepository) {
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public LoginLogServiceImpl(
+            LoginLogRepository loginLogRepository) {
         this.loginLogRepository = loginLogRepository;
     }
 
     @Override
     @Transactional
-    public LoginLogDto recordStaffLogin(Long userId, String ipAddress) {
+    public LoginLogDto recordStaffLogin(
+            Long userId,
+            String ipAddress) {
+
+        UserEntity user =
+                entityManager.find(UserEntity.class, userId);
+
+        if (user == null) {
+            throw new IllegalArgumentException(
+                    "User not found: " + userId);
+        }
+
         LoginLogEntity entity = new LoginLogEntity();
-        entity.setUserId(userId);
+        entity.setUserId(user);
         entity.setUserType(UserType.Staff);
         entity.setLoginTime(LocalDateTime.now());
         entity.setIpAddress(ipAddress);
+
         return toDto(loginLogRepository.save(entity));
     }
 
@@ -35,17 +54,21 @@ public class LoginLogServiceImpl implements LoginLogServiceI {
     @Transactional
     public LoginLogDto recordGuestLogin(String ipAddress) {
         LoginLogEntity entity = new LoginLogEntity();
+
         entity.setUserType(UserType.Guest);
         entity.setLoginTime(LocalDateTime.now());
         entity.setIpAddress(ipAddress);
+
         return toDto(loginLogRepository.save(entity));
     }
 
     @Override
     @Transactional
     public LoginLogDto recordLogout(Long userId) {
+
         LoginLogEntity entity = loginLogRepository
-                .findTopByUserIdAndLogoutTimeIsNullOrderByLoginTimeDesc(userId)
+                .findTopByUserId_IdAndLogoutTimeIsNullOrderByLoginTimeDesc(
+                        userId)
                 .orElse(null);
 
         if (entity == null) {
@@ -53,22 +76,35 @@ public class LoginLogServiceImpl implements LoginLogServiceI {
         }
 
         entity.setLogoutTime(LocalDateTime.now());
+
         return toDto(loginLogRepository.save(entity));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LoginLogDto> getAllLoginLogs() {
-        return loginLogRepository.findAll().stream().map(this::toDto).toList();
+        return loginLogRepository.findAll()
+                .stream()
+                .map(this::toDto)
+                .toList();
     }
 
     private LoginLogDto toDto(LoginLogEntity entity) {
         LoginLogDto dto = new LoginLogDto();
+
         dto.setLogId(entity.getLogId());
-        dto.setUserId(entity.getUserId());
+
+        dto.setUserId(
+                entity.getUserId() != null
+                        ? entity.getUserId().getId()
+                        : null
+        );
+
         dto.setUserType(entity.getUserType());
         dto.setLoginTime(entity.getLoginTime());
         dto.setLogoutTime(entity.getLogoutTime());
         dto.setIpAddress(entity.getIpAddress());
+
         return dto;
     }
 }

@@ -21,16 +21,16 @@ public class UserEntity extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(name = "login", nullable = false, length = 100, unique = true)
     private String login;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 225)
     private String password;
 
     public Long getId() {

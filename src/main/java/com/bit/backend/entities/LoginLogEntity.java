@@ -13,8 +13,9 @@ public class LoginLogEntity {
     @Column(name = "log_id")
     private Long logId;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private UserEntity userId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false, length = 10)
@@ -40,11 +41,11 @@ public class LoginLogEntity {
         this.logId = logId;
     }
 
-    public Long getUserId() {
+    public UserEntity getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(UserEntity userId) {
         this.userId = userId;
     }
 

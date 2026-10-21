@@ -6,17 +6,24 @@ import jakarta.persistence.*;
 @Table(name = "auth_group_authentication")
 public class PrivilegeGroupAuth extends AuditableEntity {
 
-    public PrivilegeGroupAuth() {}
+    public PrivilegeGroupAuth() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "auth_group_id")
-    private int authGroupId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "auth_group_id", nullable = false)
+    private PrivilegeGroup authGroupId;
 
-    @Column(name = "auth_id")
-    private int authId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+            name = "auth_id",
+            referencedColumnName = "auth_id",
+            nullable = false
+    )
+    private Privilege authId;
 
     public long getId() {
         return id;
@@ -26,19 +33,19 @@ public class PrivilegeGroupAuth extends AuditableEntity {
         this.id = id;
     }
 
-    public int getAuthGroupId() {
+    public PrivilegeGroup getAuthGroupId() {
         return authGroupId;
     }
 
-    public void setAuthGroupId(int authGroupId) {
+    public void setAuthGroupId(PrivilegeGroup authGroupId) {
         this.authGroupId = authGroupId;
     }
 
-    public int getAuthId() {
+    public Privilege getAuthId() {
         return authId;
     }
 
-    public void setAuthId(int authId) {
+    public void setAuthId(Privilege authId) {
         this.authId = authId;
     }
 }

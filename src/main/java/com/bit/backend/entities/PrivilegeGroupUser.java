@@ -12,11 +12,13 @@ public class PrivilegeGroupUser extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "auth_group_id")
-    private int authGroupId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "auth_group_id", nullable = false)
+    private PrivilegeGroup authGroupId;
 
-    @Column(name = "user_id")
-    private int userId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity userId;
 
     public long getId() {
         return id;
@@ -26,19 +28,19 @@ public class PrivilegeGroupUser extends AuditableEntity {
         this.id = id;
     }
 
-    public int getAuthGroupId() {
+    public PrivilegeGroup getAuthGroupId() {
         return authGroupId;
     }
 
-    public void setAuthGroupId(int authGroupId) {
+    public void setAuthGroupId(PrivilegeGroup authGroupId) {
         this.authGroupId = authGroupId;
     }
 
-    public int getUserId() {
+    public UserEntity getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(UserEntity userId) {
         this.userId = userId;
     }
 }
