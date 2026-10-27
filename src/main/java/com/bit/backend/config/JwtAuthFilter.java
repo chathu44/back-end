@@ -25,6 +25,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+
+        // Allow child photos to load without a JWT token
+        String requestPath = request.getServletPath();
+
+        if (requestPath.startsWith("/uploads/children/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (header != null) {
@@ -33,12 +42,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (authElements.length == 2
                     && "Bearer".equals(authElements[0])) {
                 try {
-
-                    // extract login
-//                    if (userDto.getLogin() != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//                        return new UsernamePasswordAuthenticationToken(userDto, null, Collections.emptyList());
-//                    }
-
                     if ("GET".equals(request.getMethod())) {
                         SecurityContextHolder.getContext().setAuthentication(
                                 userAuthProvider.validateToken(authElements[1]));
