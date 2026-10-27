@@ -30,6 +30,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+                                .requestMatchers(
+                                        org.springframework.http.HttpMethod.GET,
+                                        "/uploads/children/**"
+                                ).permitAll()
                                 .anyRequest().authenticated()
                 );
         return http.build();
